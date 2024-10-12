@@ -1,0 +1,8 @@
+## Info ################################################################################################
+# This file has various html data WHICH MAY CONTAIN SENSITIVE DATA but it's very useful for debugging! #
+# This file will be uploaded by you to the GitHub errors page if any warning or error occurred!         #
+########################################################################################################
+
+## Format ############################################################################################
+# timestamp-library function name-(if multiple data) id of html element-name of wanted data: Message #
+######################################################################################################

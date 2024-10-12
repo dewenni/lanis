@@ -1,0 +1,6 @@
+requests
+ics
+httpx
+py-machineid
+selectolax
+pycryptodomex

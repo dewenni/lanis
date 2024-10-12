@@ -1,0 +1,14 @@
+services:
+  lanis-app:
+    image: dewenni/lanis:latest
+    network_mode: host
+    container_name: lanis
+    environment:
+      - INTERVAL=60       # Zeitintervall für Abfragen in Sekunden
+      - HTTP_PORT=4040    # Umgebungsvariable für den HTTP-Server
+    pull_policy: always
+    volumes:
+      - /volume1/docker/lanis/config:/app/config
+      - /volume1/docker/lanis/output:/app/output
+      - /volume1/docker/lanis/temp:/app/temp
+      - /volume1/docker/lanis/log:/var/log
