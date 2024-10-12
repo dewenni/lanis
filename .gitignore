@@ -162,4 +162,4 @@ cython_debug/
 
 app/config/
 app/output/
-app/temp/
+app/lib/lanisapi/helpers/log/html_logs.txt

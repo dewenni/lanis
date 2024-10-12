@@ -1,2 +1,4 @@
 # lanis
-Lanis - Schulportal Hessen
+
+Docker App zum auslesen von Informationen aus dem Schulportal Hessen (Lanis)
+

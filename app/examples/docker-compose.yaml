@@ -8,6 +8,6 @@ services:
       - HTTP_PORT=4040    # Umgebungsvariable für den HTTP-Server
     pull_policy: always
     volumes:
-      - /volume1/docker/lanis/config:/app/config
-      - /volume1/docker/lanis/output:/app/output
-      - /volume1/docker/lanis/log:/var/log
+      - /volume1/docker/lanis/config:/app/config    # directory for config.ini
+      - /volume1/docker/lanis/output:/app/output    # directory for output files
+      - /volume1/docker/lanis/log:/var/log          # directory for log files
