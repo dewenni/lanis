@@ -4,7 +4,7 @@ from datetime import datetime
 
 # Dateipfad für die zwischengespeicherten Konversationen
 #CONVERSATIONS_FILE_PATH = 'temp/last_conversations.json'
-CONVERSATIONS_FILE_PATH = os.path.join(os.path.dirname(__file__), 'temp', 'last_conversations.json')
+CONVERSATIONS_FILE_PATH = os.path.join(os.path.dirname(__file__), 'output', 'last_conversations.json')
 
 def load_last_conversations():
     """Lädt die zwischengespeicherten Konversationen aus der Datei."""

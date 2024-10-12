@@ -5,7 +5,7 @@ from datetime import datetime
 
 # Dateipfad für die zwischengespeicherten Aufgaben
 #TASKS_FILE_PATH = 'temp/last_tasks.json'
-TASKS_FILE_PATH = os.path.join(os.path.dirname(__file__), 'temp', 'last_tasks.json')
+TASKS_FILE_PATH = os.path.join(os.path.dirname(__file__), 'output', 'last_tasks.json')
 
 def load_last_tasks():
     """Lädt die zwischengespeicherten Aufgaben aus der Datei."""

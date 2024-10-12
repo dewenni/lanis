@@ -10,5 +10,4 @@ services:
     volumes:
       - /volume1/docker/lanis/config:/app/config
       - /volume1/docker/lanis/output:/app/output
-      - /volume1/docker/lanis/temp:/app/temp
       - /volume1/docker/lanis/log:/var/log
