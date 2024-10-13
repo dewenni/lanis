@@ -2,6 +2,7 @@ import configparser
 import os
 import shutil
 import sys
+from datetime import datetime
 
 config = configparser.ConfigParser()
 
@@ -26,7 +27,10 @@ OPT_TASKS = get_bool_option("options", "tasks")
 OPT_CONVERSATION = get_bool_option("options", "conversations")
 OPT_CALENDAR = get_bool_option("options", "calendar")
 
-# Lese Kategorien und Schlüsselwörter aus der Konfiguration
+
+CALENDAR_START_DATE, CALENDAR_END_DATE = (
+    datetime.strptime(config['calendar'][key], '%Y-%m-%d') for key in ['start_date', 'end_date']
+)
 CALENDAR_CATEGORIES = config.get('calendar', 'filter_categories').split(',')
 CALENDAR_KEYWORDS = config.get('calendar', 'filter_keywords').split(',')
 

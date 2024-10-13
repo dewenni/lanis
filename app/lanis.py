@@ -1,6 +1,7 @@
 import sys
 import os
 import httpx
+import logging
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), 'lib')))
 
@@ -10,11 +11,12 @@ from tasks import *
 from conversation import *
 from calendar_ics import *
 from lanisapi import LanisClient, LanisAccount, LanisCookie, School
-from config import LANIS_SCHOOL, LANIS_USER, LANIS_PASSWORD, OPT_TASKS, OPT_CONVERSATION, OPT_CALENDAR
+from config import LANIS_SCHOOL, LANIS_USER, LANIS_PASSWORD, OPT_TASKS, OPT_CONVERSATION, OPT_CALENDAR, CALENDAR_START_DATE, CALENDAR_END_DATE
 
 # Lese den Intervallwert aus der Umgebungsvariable und wandle ihn in eine Ganzzahl um
 INTERVAL = int(os.getenv('INTERVAL', 3600))  # Standardwert ist 3600 Sekunden, wenn die Variable nicht gesetzt ist
 
+LOGGER = logging.getLogger("LanisAPP")
 
 def main():
     
@@ -36,23 +38,19 @@ def main():
                     #------------------------------------------------------------------------------------------------
 
                     if OPT_TASKS:
-                        # Prüfe auf neue Hausaufgaben
+                        
                         current_tasks = client.get_tasks()
-                        print(len(current_tasks))
-
-                        # Laden der zuletzt gespeicherten Aufgaben
                         last_tasks = load_last_tasks()
-                        print(len(last_tasks))
 
                         # Prüfen, ob es neue Aufgaben gibt
                         if has_new_tasks(current_tasks, last_tasks):
                             formattedTasks = formatTasks(current_tasks)
                             sendPushover("unerledigte Hausaufgaben", formattedTasks)
-                            print(formattedTasks)
+                            LOGGER.info("neue Aufgaben gefunden %s", formattedTasks)
                             # Aktualisiere die zwischengespeicherten Aufgaben
                             save_last_tasks(current_tasks)
                         else:
-                            print(f"[{datetime.now()}] Keine neuen Aufgaben gefunden.")
+                            LOGGER.info("Keine neuen Aufgaben gefunden.")
 
                     
                     #------------------------------------------------------------------------------------------------
@@ -72,39 +70,43 @@ def main():
                             # Falls ja, formatiere und sende eine Nachricht
                             formatted_conversations = formatConversations(current_conversations)
                             sendPushover("aktuelle Nachtichten", formatted_conversations)
-
+                            LOGGER.info("aktuelle Nachtichten %s", formatted_conversations)
                             # Aktualisiere die zwischengespeicherten Konversationen
                             save_last_conversations(current_conversations)
                         else:
-                            print(f"[{datetime.now()}] Keine neuen Konversationen gefunden.")
+                            LOGGER.info("Keine neuen Konversationen gefunden.")
 
                     #------------------------------------------------------------------------------------------------
 
                     if OPT_CALENDAR:
-                        start_date = datetime(2024, 10, 2, 0, 0, 0) 
-                        end_date = datetime(2025, 10, 2, 0, 0, 0)   
-                        # filtere Events
-                        filtered_events = filter_calendar_entries(client.get_calendar(start_date, end_date, True))
-                        # Exportiere die gefilterten Events in eine .ics Datei
-                        create_ics_file(filtered_events)
-                        print("Kalender aktualisiert")
+                    
+                        filtered_events = filter_calendar_entries(client.get_calendar(CALENDAR_START_DATE, CALENDAR_END_DATE, True))
+                        new_events = create_and_compare_events(filtered_events)
+                        
+                        # Überprüfe, ob new_events Einträge enthält
+                        if new_events:
+                            sendPushover("Neue Kalendereinträge", new_events)
+                            LOGGER.info("Neue Kalendereinträge: %s", new_events)
+
+                        else:
+                            LOGGER.info("Keine neuen Kalendereinträge gefunden.")
 
                 # Wenn erfolgreich, dann Schleife beenden
                 break
 
             except httpx.RequestError as e:
-                print(f"Versuch {attempt + 1} fehlgeschlagen: {e}")
+                LOGGER.warning(f"Versuch {attempt + 1} fehlgeschlagen: {e}")
                 if attempt < retries - 1:
-                    print("Versuche es in 10 Sekunden erneut...")
+                    LOGGER.info("Versuche es in 10 Sekunden erneut...")
                     time.sleep(10)  # Warte 10 Sekunden, bevor du es erneut versuchst
                 else:
-                    print("Maximale Anzahl an Versuchen erreicht. Warte auf das nächste Intervall.")
+                    LOGGER.error("Maximale Anzahl an Versuchen erreicht. Warte auf das nächste Intervall.")
 
             except Exception as e:
-                print(f"Ein unerwarteter Fehler ist aufgetreten: {e}")
+                LOGGER.error(f"Ein unerwarteter Fehler ist aufgetreten: {e}")
                 break  # Bei unerwarteten Fehlern Schleife verlassen
 
-        print(f"Warte {INTERVAL} Sekunden bis zum nächsten Durchlauf...")
+        LOGGER.info("Warte %i Sekunden bis zum nächsten Durchlauf...", INTERVAL)
         time.sleep(INTERVAL)  # Warte das angegebene Intervall
 
 

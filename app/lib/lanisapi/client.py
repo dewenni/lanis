@@ -391,7 +391,7 @@ class LanisClient:
             "Available apps:\n"
             f"  Calendar: {'Kalender' in available_apps}\n"
             + f"  Tasks: {'Mein Unterricht' in available_apps}\n"
-            + f"  Conversations: {'Nachrichten - Beta-Version' in available_apps}\n"
+            + f"  Conversations: {'Nachrichten' in available_apps}\n"
             + f"  Substitution plan: {'Vertretungsplan' in available_apps}"
         )
 
@@ -472,10 +472,10 @@ class LanisClient:
         return _get_tasks()
 
     @requires_auth
-    @check_availability("Nachrichten - Beta-Version")
+    @check_availability("Nachrichten")
     @handle_exceptions
     def get_conversations(self, number: int = 5) -> list[Conversation]:
-        """Return conversations from the "Nachrichten - Beta-Version".
+        """Return conversations from the "Nachrichten".
 
         Parameters
         ----------
@@ -516,7 +516,7 @@ class LanisClient:
     @requires_auth
     @handle_exceptions
     def get_app_availability(self, app_name: str) -> bool:
-        """Check if one of these apps: ``Kalender``, ``Mein Unterricht``, ``Nachrichten - Beta-Version``, ``Vertretungsplan`` is supported by the school.
+        """Check if one of these apps: ``Kalender``, ``Mein Unterricht``, ``Nachrichten``, ``Vertretungsplan`` is supported by the school.
 
         Parameters
         ----------

@@ -1,4 +1,4 @@
-"""This script includes classes and functions about the 'Nachrichten - Beta-Version' page."""
+"""This script includes classes and functions about the 'Nachrichten' page."""
 
 import json
 from dataclasses import dataclass
@@ -115,7 +115,7 @@ def _get_single_conversation(cryptor: Cryptor, id: str) -> dict[str, any]:
 
 
 def _get_conversations(cryptor: Cryptor, number: int = 5) -> list[Conversation]:
-    """Return conversations from the "Nachrichten - Beta-Version".
+    """Return conversations from the "Nachrichten".
 
     Parameters
     ----------

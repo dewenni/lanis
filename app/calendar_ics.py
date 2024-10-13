@@ -1,29 +1,17 @@
 import re
 import os
+import json
+import logging
 
 from datetime import datetime
 from ics import Calendar, Event
 from config import CALENDAR_CATEGORIES, CALENDAR_KEYWORDS
 
-#CALENDAR_FILE_PATH = 'output/lanis_calendar.ics'
-CALENDAR_FILE_PATH = os.path.join(os.path.dirname(__file__), 'output', 'lanis_calendar.ics')
+LOGGER = logging.getLogger("LanisAPP")
 
-def filter_events_by_work(calendar):
-    filtered_events = []
-    
-    for event in calendar.events:
-        if "Arbeit" in event.title:
-            filtered_events.append({
-                "Datum": event.start.date(),
-                "Titel": event.title,
-                "Start": event.start.strftime("%Y-%m-%d %H:%M"),
-                "Ende": event.end.strftime("%Y-%m-%d %H:%M")
-            })
-    
-    return filtered_events
-
-from datetime import datetime
-import json
+ALL_EVENTS_FILE_PATH = os.path.join(os.path.dirname(__file__), 'output', 'lanis_all_events.ics')
+NEW_EVENTS_FILE_PATH = os.path.join(os.path.dirname(__file__), 'output', 'lanis_new_events.ics')
+EVENTS_FILE_PATH = os.path.join(os.path.dirname(__file__), 'output', 'last_events.json')
 
 def filter_calendar_entries(calendar):
     filtered_entries = []
@@ -35,6 +23,7 @@ def filter_calendar_entries(calendar):
         if event['category'] in CALENDAR_CATEGORIES or any(keyword in event['title'] for keyword in CALENDAR_KEYWORDS):
             # Füge die relevanten Informationen in ein Dictionary ein
             filtered_entry = {
+                'Id': event['Id'],
                 'title': event['title'],
                 'description': event['description'],
                 'allDay': event['allDay'],
@@ -46,20 +35,75 @@ def filter_calendar_entries(calendar):
     return filtered_entries
 
 
-def create_ics_file(filtered_entries):
-    """
-    Create an ICS file from the filtered calendar entries.
+def load_last_events():
+    """Lädt die zwischengespeicherten Events aus der Datei."""
+    try:
+        with open(EVENTS_FILE_PATH, 'r') as file:
+            return json.load(file)
+    except FileNotFoundError:
+        # Wenn die Datei nicht existiert, wird eine leere Liste zurückgegeben
+        return []
 
-    Parameters
-    ----------
-    filtered_entries : list
-        A list of filtered calendar entries to write to the ICS file.
-    filename : str, default 'calendar.ics'
-        The name of the ICS file to create.
-    """
-    calendar = Calendar()
+def save_last_events(events):
+    """Speichert die aktuellen Events als JSON in einer Datei."""
+    with open(EVENTS_FILE_PATH, 'w') as file:
+        # Speichere die Events als Liste von Dictionaries
+        json.dump(events, file, indent=4)
 
-    # Durchlaufe die gefilterten Einträge und füge sie dem Kalender hinzu
+def has_new_events(current_events, last_events):
+    """Überprüft, ob es neue Events basierend auf den Event-IDs gibt."""
+    current_ids = {event['Id'] for event in current_events}
+    last_ids = {event['Id'] for event in last_events}
+    
+    # Gib nur die neuen Events zurück
+    return [event for event in current_events if event['Id'] not in last_ids]
+
+def format_events(events):
+    """Formatiert die neuen Events für die Ausgabe per Pushover."""
+    formatted_events = []
+    
+    for event in events:
+        start_time = datetime.strptime(event['start'], '%Y-%m-%dT%H:%M:%S%z')
+        end_time = datetime.strptime(event['end'], '%Y-%m-%dT%H:%M:%S%z')
+        
+        formatted_event = (f"Neuer Termin: {event['title']}\n"
+                           f"Beginn: {start_time.strftime('%d.%m.%Y %H:%M')}\n"
+                           f"Ende: {end_time.strftime('%d.%m.%Y %H:%M')}\n"
+                           f"Beschreibung: {event['description']}\n")
+        formatted_events.append(formatted_event)
+
+    return "\n\n".join(formatted_events)
+
+def create_and_compare_events(filtered_entries):
+    """Erstellt die ICS-Datei und gibt neue Events zurück."""
+    # Lade die letzten gespeicherten Events
+    last_events = load_last_events()
+
+    # Finde die neuen Events
+    new_events = has_new_events(filtered_entries, last_events)
+
+    # Überprüfe, ob new_events Einträge enthält
+    if new_events:
+        # Aktualisieren und erstelle neue ics Dateien
+        create_ics_file(filtered_entries, new_events)
+
+    # Aktualisiere die last_events.json mit den aktuellen Events
+    save_last_events(filtered_entries)
+
+    # Formatierte Ausgabe der neuen Events für Pushover
+    formatted_new_events = format_events(new_events)
+    
+    return formatted_new_events
+
+
+def create_ics_file(filtered_entries, new_entries):
+    # Kalender für alle Einträge erstellen
+    all_events_calendar = Calendar()
+
+    # Kalender für neue Einträge erstellen
+    new_events_calendar = Calendar()
+
+    # Alle Einträge dem Kalender hinzufügen
     for entry in filtered_entries:
         event = Event()
         event.name = entry['title']
@@ -67,18 +111,24 @@ def create_ics_file(filtered_entries):
         event.end = entry['end']
         event.description = entry['description']
 
-        # Überprüfe, ob es sich um einen ganztägigen Termin handelt
         if entry['allDay']:
             event.make_all_day()
 
-        calendar.events.add(event)
+        # Füge das Event dem Kalender für alle Einträge hinzu
+        all_events_calendar.events.add(event)
 
-    # Schreibe den Kalender in die ICS-Datei
-    with open(CALENDAR_FILE_PATH, 'w') as f:
-        f.writelines(calendar)
+        # Wenn das Event neu ist, füge es auch dem Kalender für neue Einträge hinzu
+        if entry['Id'] in [e['Id'] for e in new_entries]:
+            new_events_calendar.events.add(event)
 
-    print(f'ICS file created: {CALENDAR_FILE_PATH}')
+    # Schreibe den Kalender für alle Events in die ICS-Datei
+    with open(ALL_EVENTS_FILE_PATH, 'w') as f:
+        f.writelines(all_events_calendar)
 
+    LOGGER.info('ics Datei mit allen Einträgen erstellt: %s', ALL_EVENTS_FILE_PATH)
 
+    # Schreibe den Kalender für nur neue Events in die ICS-Datei
+    with open(NEW_EVENTS_FILE_PATH, 'w') as f:
+        f.writelines(new_events_calendar)
 
-
+    LOGGER.info('ics Datei mit neuen Einträgen erstellt: %s', NEW_EVENTS_FILE_PATH)

@@ -1,10 +1,11 @@
 import time
 import json
 import os
+import logging
 from datetime import datetime
 
-# Dateipfad für die zwischengespeicherten Aufgaben
-#TASKS_FILE_PATH = 'temp/last_tasks.json'
+LOGGER = logging.getLogger("LanisAPP")
+
 TASKS_FILE_PATH = os.path.join(os.path.dirname(__file__), 'output', 'last_tasks.json')
 
 def load_last_tasks():
@@ -14,7 +15,7 @@ def load_last_tasks():
             return json.load(file)
     except FileNotFoundError:
         # Wenn die Datei nicht existiert, wird eine leere Liste zurückgegeben
-        print("no task file found: " + TASKS_FILE_PATH)
+        LOGGER.warning("Task file not found: %s", TASKS_FILE_PATH)
         return []
 
 def save_last_tasks(tasks):
@@ -26,7 +27,6 @@ def save_last_tasks(tasks):
 def has_new_tasks(current_tasks, last_tasks):
     """Vergleicht die aktuellen Aufgaben mit den zuletzt gespeicherten Aufgaben."""
     if len(current_tasks) != len(last_tasks):
-        print("neue Tasks vorhanden")
         return True
 
     # Vergleiche die Titel, Daten und Fächer der Aufgaben

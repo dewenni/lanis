@@ -1,5 +1,8 @@
 import requests
+import logging
 from config import PUSHOVER_API, PUSHOVER_USER
+
+LOGGER = logging.getLogger("LanisAPP")
 
 def sendPushover(title, message):
 
@@ -16,6 +19,7 @@ def sendPushover(title, message):
 
     # Überprüfe, ob die Nachricht erfolgreich gesendet wurde
     if response.status_code == 200:
-        print("Nachricht erfolgreich gesendet!")
+        LOGGER.info("Pushover - Nachricht erfolgreich gesendet!")
+
     else:
-        print(f"Fehler beim Senden der Nachricht: {response.status_code}")
+        LOGGER.warning("Pushover - Fehler beim Senden der Nachricht: %i", response.status_code)

@@ -135,12 +135,12 @@ def _get_available_apps() -> list[str]:
     Returns
     -------
     list[str]
-        A list which contains some of these strings: ``Kalender``, ``Mein Unterricht``, ``Nachrichten - Beta-Version``, ``Vertretungsplan``
+        A list which contains some of these strings: ``Kalender``, ``Mein Unterricht``, ``Nachrichten``, ``Vertretungsplan``
     """
     implemented_apps = [
         "Kalender",
         "Mein Unterricht",
-        "Nachrichten - Beta-Version",  # Yeah there are probably more names for that app
+        "Nachrichten",
         "Vertretungsplan",
     ]
     gotten_apps = _get_apps()
@@ -163,7 +163,7 @@ def _get_available_apps() -> list[str]:
 
 @cache
 def _get_app_availability(app_name: str) -> bool:
-    """Check if one of these apps: ``Kalender``, ``Mein Unterricht``, ``Nachrichten - Beta-Version``, ``Vertretungsplan`` is supported by the school.
+    """Check if one of these apps: ``Kalender``, ``Mein Unterricht``, ``Nachrichten``, ``Vertretungsplan`` is supported by the school.
 
     Parameters
     ----------
