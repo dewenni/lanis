@@ -45,7 +45,7 @@ Im Ordner `examples` findest du ein Beispiel für eine `docker-compose.yaml`.
 Eine Vorlage der `config.ini` liegt ebenfalls im `examples`-Ordner. Du kannst sie an deine Bedürfnisse anpassen.
 
 > [!NOTE] 
-> Ein aktuelles Image steht immer im Docker-Hub zur Verfügung. Ihr benötigt eigentlich nur das `docker-compose.yaml` von dieser Git-Hub Seite!
+> Ein aktuelles Image steht immer im [Docker-Hub](https://hub.docker.com/repository/docker/dewenni/lanis/general) zur Verfügung. Ihr benötigt eigentlich nur das `docker-compose.yaml` von dieser Git-Hub Seite!
 
 ## Docker Compose Setup
 
