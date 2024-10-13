@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    tags:
+      - 'v*.*.*'  # Reagiere auf Tags im Format vX.X.X
 
 jobs:
   build:
@@ -26,6 +28,8 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: dockerfile  # der Pfad zu deinem Dockerfile
+          file: Dockerfile  # der Pfad zu deinem Dockerfile
           push: true
-          tags: dewenni/lanis:latest
+          tags: |
+            dewenni/lanis:latest
+            dewenni/lanis:${{ github.ref_name }}  # Tag mit dem Git-Tag

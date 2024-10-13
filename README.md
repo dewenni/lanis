@@ -10,9 +10,7 @@
 <div align="center">
 
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/dewenni/lanis/docker-build.yml)
-
 ![Docker Pulls](https://img.shields.io/docker/pulls/dewenni/lanis)
-
 ![GitHub last commit](https://img.shields.io/github/last-commit/dewenni/lanis)
 ![GitHub watchers](https://img.shields.io/github/watchers/dewenni/lanis?style=social)
 [![GitHub stars](https://img.shields.io/github/stars/dewenni/lanis.svg?style=social&label=Star)](https://github.com/dewenni/lanis/stargazers/)
@@ -29,7 +27,7 @@ wenn es dir gefällt, drück den <b>[ Star ⭐️ ] </b> und klick auf <b>[ watc
 
 # Lanis
 
-Lanis ist eine Anwendung, die Informationen vom Hessischen Schulportal abruft und als Pushover-Nachrichten versendet. Die App ist als Docker-Anwendung vorbereitet und kann einfach über Docker Compose ausgeführt werden. Als Basis dient die [LanisAPI](https://github.com/lanis-mobile/LanisAPI)
+Lanis ist eine Anwendung, die Informationen vom [Schulportal Hessen](https://start.schulportal.hessen.de/index.php) abruft und als Pushover-Nachrichten versendet. Die App ist als Docker-Anwendung vorbereitet und kann einfach über Docker Compose ausgeführt werden. Als Basis dient die [LanisAPI](https://github.com/lanis-mobile/LanisAPI)
 
 ## Features
 
@@ -40,9 +38,11 @@ Lanis ist eine Anwendung, die Informationen vom Hessischen Schulportal abruft un
 
 ## Installation
 
-Docker Compose: Im Ordner `examples` findest du ein Beispiel für eine `docker-compose.yaml`.
+**Docker Compose:**  
+Im Ordner `examples` findest du ein Beispiel für eine `docker-compose.yaml`.
 
-Konfigurationsdatei: Eine Vorlage der `config.ini` liegt ebenfalls im `examples`-Ordner. Du kannst sie an deine Bedürfnisse anpassen.
+**Konfigurationsdatei:**  
+Eine Vorlage der `config.ini` liegt ebenfalls im `examples`-Ordner. Du kannst sie an deine Bedürfnisse anpassen.
 
 > [!NOTE] 
 > Ein aktuelles Image steht immer im Docker-Hub zur Verfügung. Ihr benötigt eigentlich nur das `docker-compose.yaml` von dieser Git-Hub Seite!
@@ -71,9 +71,8 @@ services:
 
 ## Verwendung
 
-Passe ggf die Einstellungen im docker-compose.yaml an.
-Stelle sicher, dass die angegebenen Verzeichnise als Volume existieren
-Passe die Einstellungen in der config.ini nach Bedarf an.
+Überprüfe und Ändere die Einstellungen im docker-compose.yaml nach deinen Bedürfnissen. Stelle sicher, dass die angegebenen Verzeichnise als Volume existieren.
+Überprüfe und Ändere die Einstellungen in der config.ini mit deinen Daten und nach deinen Bedürfnissen.
 
 ```ini
 [lanis]
@@ -82,7 +81,7 @@ username = Vorname.Nachname     # Vorname.Name
 password = Passwort             # Passwort 
 
 [pushover]
-user_key = xxx                  # Pushover User-Key  
+user_keys = xxx                 # Pushover User-Keys (Mehrere User_Keys mit Komma trennen)
 api_token = xxx                 # Pushover API-Token  
 
 [options]
@@ -100,7 +99,7 @@ filter_keywords = 5g1           # Filter auf Schlüsselwörter wie z.B. Klasse (
 ## Hinweise
 
 ### Schul-ID
-Die Schul-ID kann man aus der URL vom Schulportal heruaslesen
+Die Schul-ID kann man aus der URL vom Schulportal herauslesen
 (?=i) in der URL: `https://start.schulportal.hessen.de/?i=SCHOOLID`
 
 ### Pushover
