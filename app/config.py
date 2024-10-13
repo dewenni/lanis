@@ -21,7 +21,7 @@ LANIS_USER = config['lanis']['username']
 LANIS_PASSWORD = config['lanis']['password']
 
 PUSHOVER_API = config['pushover']['api_token']
-PUSHOVER_USER = config['pushover']['user_key']
+PUSHOVER_USERS = config['pushover']['user_keys'].split(',')
 
 OPT_TASKS = get_bool_option("options", "tasks")
 OPT_CONVERSATION = get_bool_option("options", "conversations")
