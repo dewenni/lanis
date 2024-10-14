@@ -9,9 +9,10 @@
 
 <div align="center">
 
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/dewenni/lanis/docker-build.yml)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/dewenni/lanis/docker_build_latest.yml)
 ![Docker Pulls](https://img.shields.io/docker/pulls/dewenni/lanis)
 ![GitHub last commit](https://img.shields.io/github/last-commit/dewenni/lanis)
+[![Current Release](https://img.shields.io/github/release/dewenni/lanis.svg)](https://github.com/dewenni/lanis/releases/latest)
 ![GitHub watchers](https://img.shields.io/github/watchers/dewenni/lanis?style=social)
 [![GitHub stars](https://img.shields.io/github/stars/dewenni/lanis.svg?style=social&label=Star)](https://github.com/dewenni/lanis/stargazers/)
 
