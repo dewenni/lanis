@@ -23,6 +23,9 @@ def main():
     # LANIS-Client erstellen
     client = LanisClient(LanisAccount(LANIS_SCHOOL, LANIS_USER, LANIS_PASSWORD))
 
+    # Welcome Nachricht
+    sendPushover("Lanis-App", "Lanis-App ist gestartet und prüft nun regelmäßig Updates im Schulportal")
+
     while True:
         retries = 3  # Maximale Anzahl der Versuche
         for attempt in range(retries):

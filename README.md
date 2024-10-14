@@ -60,7 +60,7 @@ services:
     network_mode: host
     container_name: lanis
     environment:
-      - INTERVAL=60       # Zeitintervall für Abfragen in Sekunden
+      - INTERVAL=3600     # Zeitintervall für Abfragen in Sekunden
       - HTTP_PORT=4040    # Umgebungsvariable für den HTTP-Server
     pull_policy: always
     volumes:
