@@ -3,8 +3,7 @@ import json
 import os
 import logging
 from datetime import datetime
-
-LOGGER = logging.getLogger("LanisAPP")
+from lanis_log import LANISLOG
 
 TASKS_FILE_PATH = os.path.join(os.path.dirname(__file__), 'output', 'last_tasks.json')
 
@@ -15,7 +14,7 @@ def load_last_tasks():
             return json.load(file)
     except FileNotFoundError:
         # Wenn die Datei nicht existiert, wird eine leere Liste zurückgegeben
-        LOGGER.warning("Task file not found: %s", TASKS_FILE_PATH)
+        LANISLOG.warning("Task file not found: %s", TASKS_FILE_PATH)
         return []
 
 def save_last_tasks(tasks):

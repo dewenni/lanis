@@ -2,8 +2,7 @@ import requests
 import logging
 import httpx
 from config import PUSHOVER_API, PUSHOVER_USERS
-
-LOGGER = logging.getLogger("LanisAPP")
+from lanis_log import LANISLOG
 
 def sendPushover(title, message):
     """Sendet eine Pushover-Nachricht an alle definierten Empfänger."""
@@ -19,11 +18,11 @@ def sendPushover(title, message):
         try:
             response = httpx.post(url, data=data)
             if response.status_code == 200:
-                LOGGER.info(f"Nachricht erfolgreich an {user_key} gesendet.")
+                LANISLOG.info(f"Nachricht erfolgreich an {user_key} gesendet.")
             else:
-                LOGGER.warning(f"Fehler beim Senden an {user_key}: {response.text}")
+                LANISLOG.warning(f"Fehler beim Senden an {user_key}: {response.text}")
         except httpx.RequestError as e:
-            LOGGER.warning(f"HTTP-Fehler bei der Verbindung zu Pushover für {user_key}: {e}")
+            LANISLOG.warning(f"HTTP-Fehler bei der Verbindung zu Pushover für {user_key}: {e}")
 
    
     

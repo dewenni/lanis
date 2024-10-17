@@ -1,6 +1,7 @@
 import json
 import os
 from datetime import datetime
+from lanis_log import LANISLOG
 
 CONVERSATIONS_FILE_PATH = os.path.join(os.path.dirname(__file__), 'output', 'last_conversations.json')
 

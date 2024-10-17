@@ -1,3 +1,9 @@
-# first release
+## was gibts neues
 
-Dieses Release ist ein erster Versuch und kann sowohl instabil als auch unvollständig sein.
+Dieses Projekt befindet sich noch in einer experimentellen Phase.
+Es kann jedoch gerne schon genutzt und getestet werden.
+
+## changelog
+
+- Logging angepasst
+- github Workflow angepasst

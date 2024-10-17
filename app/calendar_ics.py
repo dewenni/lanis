@@ -6,8 +6,7 @@ import logging
 from datetime import datetime
 from ics import Calendar, Event
 from config import CALENDAR_CATEGORIES, CALENDAR_KEYWORDS
-
-LOGGER = logging.getLogger("LanisAPP")
+from lanis_log import LANISLOG
 
 ALL_EVENTS_FILE_PATH = os.path.join(os.path.dirname(__file__), 'output', 'lanis_all_events.ics')
 NEW_EVENTS_FILE_PATH = os.path.join(os.path.dirname(__file__), 'output', 'lanis_new_events.ics')
@@ -125,10 +124,10 @@ def create_ics_file(filtered_entries, new_entries):
     with open(ALL_EVENTS_FILE_PATH, 'w') as f:
         f.writelines(all_events_calendar)
 
-    LOGGER.info('ics Datei mit allen Einträgen erstellt: %s', ALL_EVENTS_FILE_PATH)
+    LANISLOG.info('ics Datei mit allen Einträgen erstellt: %s', ALL_EVENTS_FILE_PATH)
 
     # Schreibe den Kalender für nur neue Events in die ICS-Datei
     with open(NEW_EVENTS_FILE_PATH, 'w') as f:
         f.writelines(new_events_calendar)
 
-    LOGGER.info('ics Datei mit neuen Einträgen erstellt: %s', NEW_EVENTS_FILE_PATH)
+    LANISLOG.info('ics Datei mit neuen Einträgen erstellt: %s', NEW_EVENTS_FILE_PATH)
