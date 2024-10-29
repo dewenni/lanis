@@ -317,7 +317,7 @@ class LanisClient:
 
     @handle_exceptions
     def authenticate(
-        self, session_type: SessionType = SessionType.NORMAL, force: bool = True
+        self, session_type: SessionType = SessionType.NORMAL, force: bool = False
     ) -> None:
         """Log into the school portal and sets the session id in the auth_cookies.
 
