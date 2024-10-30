@@ -22,10 +22,7 @@ def main():
     
     # LANIS-Client erstellen
     client = LanisClient(LanisAccount(LANIS_SCHOOL, LANIS_USER, LANIS_PASSWORD))
-
-    # Welcome Nachricht
-    sendPushover("Lanis-App", "Lanis-App ist gestartet und prüft nun regelmäßig Updates im Schulportal")
-                
+              
     # authentifizieren 
     client.authenticate()
 
