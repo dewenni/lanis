@@ -5,5 +5,5 @@ Es kann jedoch gerne schon genutzt und getestet werden.
 
 ## changelog
 
-- Logging angepasst
-- github Workflow angepasst
+- Logging angepasst (Zeitstempel ergänzt)
+- Anhänge bei Hausaufgaben mit ausgeben

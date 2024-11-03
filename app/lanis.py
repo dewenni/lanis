@@ -35,6 +35,8 @@ def main():
         current_tasks = client.get_tasks()
         last_tasks = load_last_tasks()
 
+        print(current_tasks)
+
         # Prüfen, ob es neue Aufgaben gibt
         if has_new_tasks(current_tasks, last_tasks):
             formattedTasks = formatTasks(current_tasks)

@@ -56,20 +56,29 @@ def formatTasks(tasks):
                 'date': task.date.strftime('%d.%m.%Y'),
                 'subject_name': task.subject_name,
                 'teacher': task.teacher,
-                'description': task.description
+                'description': task.description,
+                'attachments': task.attachment  # Anhänge hinzufügen
             }
+            
             # Formatiere die Aufgabe für die Ausgabe
             formatted_task = (f"Fach: {task_data['subject_name']}\n"
                               f"Lehrer: {task_data['teacher']}\n"
                               f"Datum: {task_data['date']}\n"
                               f"Titel: {task_data['title']}\n"
                               f"Beschreibung: {task_data['description']}")
+            
+            # Falls Anhänge vorhanden sind, füge die Namen hinzu
+            if task_data['attachments']:
+                formatted_task += "\nAnhänge:\n" + "\n".join(f"- {attachment}" for attachment in task_data['attachments'])
+
             formatted_tasks.append(formatted_task)
+        
         except AttributeError:
             # Falls ein Attribut fehlt, überspringe diese Aufgabe
             continue
 
     # Kombiniere alle formatierten Aufgaben in einem String
     return "\n\n".join(formatted_tasks)
+
 
 
