@@ -5,5 +5,4 @@ Es kann jedoch gerne schon genutzt und getestet werden.
 
 ## changelog
 
-- Logging angepasst (Zeitstempel ergänzt)
-- Anhänge bei Hausaufgaben mit ausgeben
+- überspringe Tasks ohne Datum

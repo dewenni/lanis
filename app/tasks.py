@@ -30,8 +30,13 @@ def has_new_tasks(current_tasks, last_tasks):
 
     # Vergleiche die Titel, Daten und Fächer der Aufgaben
     for current_task, last_task in zip(current_tasks, last_tasks):
+        
+        date_string = last_task.get('date')
+        if date_string is None:
+            continue
+
         # Konvertiere das gespeicherte Datum (String) in ein datetime-Objekt
-        last_task_date = datetime.strptime(last_task.get('date'), '%Y-%m-%d %H:%M:%S')
+        last_task_date = datetime.strptime(date_string, '%Y-%m-%d %H:%M:%S')
         
         if (current_task.title != last_task.get('title') or 
             current_task.date != last_task_date or
