@@ -9,7 +9,7 @@
 
 <div align="center">
 
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/dewenni/lanis/docker_build_latest.yml)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/dewenni/lanis/docker_build.yml)
 ![Docker Pulls](https://img.shields.io/docker/pulls/dewenni/lanis)
 ![GitHub last commit](https://img.shields.io/github/last-commit/dewenni/lanis)
 [![Current Release](https://img.shields.io/github/release/dewenni/lanis.svg)](https://github.com/dewenni/lanis/releases/latest)
