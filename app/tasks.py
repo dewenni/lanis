@@ -23,27 +23,46 @@ def save_last_tasks(tasks):
         # Konvertiert die Task-Objekte zu einem speicherbaren Format (z.B. Dictionaries)
         json.dump([task.__dict__ for task in tasks], file, default=str, indent=4)
 
+def _task_key(task):
+    """Erzeugt einen stabilen Schlüssel, mit dem Aufgaben eindeutig verglichen werden."""
+    task_date = getattr(task, 'date', None)
+    if isinstance(task_date, datetime):
+        normalized_date = task_date.strftime('%Y-%m-%d %H:%M:%S')
+    elif isinstance(task_date, str):
+        try:
+            normalized_date = datetime.strptime(task_date, '%Y-%m-%d %H:%M:%S').strftime('%Y-%m-%d %H:%M:%S')
+        except ValueError:
+            normalized_date = task_date
+    else:
+        normalized_date = ''
+
+    return (
+        getattr(task, 'title', None),
+        normalized_date,
+        getattr(task, 'subject_name', None),
+    )
+
+
+def get_new_tasks(current_tasks, last_tasks):
+    """Gibt nur die Aufgaben zurück, die seit dem letzten Lauf neu hinzugekommen sind."""
+    last_task_keys = {
+        (
+            last_task.get('title'),
+            last_task.get('date'),
+            last_task.get('subject_name'),
+        )
+        for last_task in last_tasks
+    }
+
+    return [
+        task for task in current_tasks
+        if _task_key(task) not in last_task_keys
+    ]
+
+
 def has_new_tasks(current_tasks, last_tasks):
-    """Vergleicht die aktuellen Aufgaben mit den zuletzt gespeicherten Aufgaben."""
-    if len(current_tasks) != len(last_tasks):
-        return True
-
-    # Vergleiche die Titel, Daten und Fächer der Aufgaben
-    for current_task, last_task in zip(current_tasks, last_tasks):
-        
-        date_string = last_task.get('date')
-        if date_string is None:
-            continue
-
-        # Konvertiere das gespeicherte Datum (String) in ein datetime-Objekt
-        last_task_date = datetime.strptime(date_string, '%Y-%m-%d %H:%M:%S')
-        
-        if (current_task.title != last_task.get('title') or 
-            current_task.date != last_task_date or
-            current_task.subject_name != last_task.get('subject_name')):
-            return True
-
-    return False
+    """Prüft, ob neue Aufgaben seit dem letzten Lauf hinzugekommen sind."""
+    return bool(get_new_tasks(current_tasks, last_tasks))
 
 
 def formatTasks(tasks):

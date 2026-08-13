@@ -34,12 +34,11 @@ def main():
         
         current_tasks = client.get_tasks()
         last_tasks = load_last_tasks()
-
-        print(current_tasks)
+        new_tasks = get_new_tasks(current_tasks, last_tasks)
 
         # Prüfen, ob es neue Aufgaben gibt
-        if has_new_tasks(current_tasks, last_tasks):
-            formattedTasks = formatTasks(current_tasks)
+        if new_tasks:
+            formattedTasks = formatTasks(new_tasks)
             sendPushover("unerledigte Hausaufgaben", formattedTasks)
             LANISLOG.info("neue Aufgaben gefunden %s", formattedTasks)
             # Aktualisiere die zwischengespeicherten Aufgaben
@@ -59,11 +58,12 @@ def main():
 
         # Laden der zuletzt gespeicherten Konversationen
         last_conversations = load_last_conversations()
+        new_conversations = get_new_conversations(current_conversations, last_conversations)
 
         # Prüfen, ob es neue Konversationen gibt
-        if has_new_conversations(current_conversations, last_conversations):
-            # Falls ja, formatiere und sende eine Nachricht
-            formatted_conversations = formatConversations(current_conversations)
+        if new_conversations:
+            # Falls ja, formatiere und sende nur die neuen Einträge
+            formatted_conversations = formatConversations(new_conversations)
             sendPushover("aktuelle Nachtichten", formatted_conversations)
             LANISLOG.info("aktuelle Nachtichten %s", formatted_conversations)
             # Aktualisiere die zwischengespeicherten Konversationen

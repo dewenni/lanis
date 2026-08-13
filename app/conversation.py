@@ -30,12 +30,20 @@ def save_last_conversations(conversations):
             'content': conv.content
         } for conv in conversations], file, indent=4)
 
+def get_new_conversations(current_conversations, last_conversations):
+    """Gibt nur die Konversationen zurück, die seit dem letzten Lauf neu hinzugekommen sind."""
+    current_ids = {conv.id for conv in current_conversations}
+    last_ids = {conv.get('id') for conv in last_conversations}
+
+    return [
+        conv for conv in current_conversations
+        if conv.id not in last_ids
+    ]
+
+
 def has_new_conversations(current_conversations, last_conversations):
     """Überprüft, ob es neue Konversationen basierend auf den IDs gibt."""
-    current_ids = {conv.id for conv in current_conversations}
-    last_ids = {conv['id'] for conv in last_conversations}
-
-    return not current_ids.issubset(last_ids)
+    return bool(get_new_conversations(current_conversations, last_conversations))
 
 
 def formatConversations(conversations):
