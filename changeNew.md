@@ -5,4 +5,4 @@ Es kann jedoch gerne schon genutzt und getestet werden.
 
 ## changelog
 
-- überspringe Tasks ohne Datum
+- Optimierte Pushover Nachrichten. Bisher wurden mit jeder Nachricht alle vorhandenen Elemente gesendet. Ab jetzt wird immer nur der neu dazu gekommene Inhalt versendet.
